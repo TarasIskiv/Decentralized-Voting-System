@@ -20,6 +20,12 @@ contract BaseAccessControl is AccessControl
         _;
     }
 
+    modifier onlyModerator()
+    {
+        require(hasRole(MODERATOR_ROLE, msg.sender), "You don't have access for this action");
+        _;
+    }
+
     modifier onlyPersonWithAccess()
     {
         require(hasRole(MODERATOR_ROLE, msg.sender) || hasRole(ADMIN_ROLE, msg.sender), "You don't have access for this action");
