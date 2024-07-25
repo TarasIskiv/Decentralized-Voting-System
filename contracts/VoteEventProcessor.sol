@@ -10,7 +10,7 @@ enum VoteEventStatus {
 
 struct VoteEventDetail {
     uint256 id;
-    bool isActive;
+    VoteEventStatus status;
     uint256 totalVotes;
     uint256 voteFee;
     mapping(uint256 => uint256) candidateVotes; // Nested mapping inside the struct
@@ -29,7 +29,7 @@ contract VoteEventProcessor {
     receive() external payable {}
 
     modifier isDeactivated(uint256 _eventId) {
-        require(!voteEventDetails[_eventId].isActive, "You can't remove active event");
+        require(voteEventDetails[_eventId].status == VoteEventStatus.Active, "You can't remove active event");
         _;
     }
 
@@ -39,7 +39,7 @@ contract VoteEventProcessor {
 
         VoteEventDetail storage voteEvent = voteEventDetails[tokenId];
         voteEvent.id = tokenId;
-        voteEvent.isActive = true;
+        voteEvent.status = VoteEventStatus.Active;
         voteEvent.totalVotes = 0;
         voteEvent.voteFee = 1000000 gwei;
     }
@@ -52,7 +52,7 @@ contract VoteEventProcessor {
 
     function vote(uint256 _eventId, uint256 _candidateId) public {
         VoteEventDetail storage selectedEvent = voteEventDetails[_eventId];
-        require(selectedEvent.isActive, "Event is no longer active");
+        require(selectedEvent.status == VoteEventStatus.Active, "Event is no longer active");
         require(msg.sender.balance >= selectedEvent.voteFee, "You don't have enough money to vote");
 
         require(selectedEvent.candidateVotes[_candidateId] >= 0, "Candidate doesn't take part in the event");
@@ -78,6 +78,6 @@ contract VoteEventProcessor {
 
     function deactivateVoteEvent(uint _eventId) public
     {
-        voteEventDetails[_eventId].isActive = false;
+        voteEventDetails[_eventId].status = VoteEventStatus.Deactivated;
     }
 }
