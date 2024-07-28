@@ -14,9 +14,9 @@ contract Candidate is ERC721URIStorage, IERC721Receiver, BaseAccessControl {
     Counters.Counter private tokenIds;
     uint256 public totalSupply = 0;
 
-    constructor() ERC721("Candidate", "CND") {}
+    constructor() ERC721("Candidate", "CND") BaseAccessControl(msg.sender) {}
 
-    function registerCandidate(string memory _url) public onlyPersonWithAccess returns (uint256) {
+    function registerCandidate(string memory _url) public onlyPersonWithAccess(msg.sender) returns (uint256) {
         tokenIds.increment();
         uint256 tokenId = tokenIds.current();
         _safeMint(address(this), tokenId);
@@ -26,7 +26,7 @@ contract Candidate is ERC721URIStorage, IERC721Receiver, BaseAccessControl {
         return tokenId;
     }
 
-    function removeCandidate(uint256 _tokenId) public onlyAdmin {
+    function removeCandidate(uint256 _tokenId) public onlyAdmin(msg.sender) {
         _burn(_tokenId);
     }
 

@@ -2,7 +2,7 @@
 pragma solidity 0.8.26;
 
 import "./Vote.sol";
-
+import "./BaseAccessControl.sol";
 enum VoteEventStatus {
     Active,
     Deactivated
@@ -16,12 +16,13 @@ struct VoteEventDetail {
     mapping(uint256 => uint256) candidateVotes; // Nested mapping inside the struct
 }
 
-contract VoteEventProcessor {
+contract VoteEventProcessor is BaseAccessControl
+{
     mapping(uint256 => VoteEventDetail) private voteEventDetails;
 
     Vote private voteContract;
 
-    constructor(address voteContractAddress) 
+    constructor(address voteContractAddress) BaseAccessControl(msg.sender)
     {
         voteContract = Vote(voteContractAddress);
     }
@@ -34,9 +35,9 @@ contract VoteEventProcessor {
         _;
     }
 
-    function addNewEvent(string memory _tokenURI) public 
+    function addNewEvent(string memory _tokenURI) onlyPersonWithAccess(msg.sender) public 
     {
-        uint256 tokenId = voteContract.createVoteEvent(_tokenURI);
+        uint256 tokenId = voteContract.createVoteEvent(msg.sender, _tokenURI);
 
         VoteEventDetail storage voteEvent = voteEventDetails[tokenId];
         voteEvent.id = tokenId;
@@ -45,13 +46,13 @@ contract VoteEventProcessor {
         voteEvent.voteFee = 1000000000000000 wei;
     }
 
-    function removeEvent(uint256 _tokenId) public isDeactivated(_tokenId) 
+    function removeEvent(uint256 _tokenId) onlyAdmin(msg.sender) public isDeactivated(_tokenId) 
     {
-        voteContract.removeVoteEvent(_tokenId);
+        voteContract.removeVoteEvent(msg.sender, _tokenId);
         delete voteEventDetails[_tokenId];
     }
 
-    function vote(uint256 _eventId, uint256 _candidateId) public payable {
+    function vote(uint256 _eventId, uint256 _candidateId) onlyUser(msg.sender) public payable {
         VoteEventDetail storage selectedEvent = voteEventDetails[_eventId];
         require(selectedEvent.status == VoteEventStatus.Active, "Event is no longer active");
         require(msg.sender.balance >= selectedEvent.voteFee, "You don't have enough money to vote");
@@ -62,7 +63,7 @@ contract VoteEventProcessor {
         selectedEvent.totalVotes++;
     }
 
-    function addCandidate(uint256 _eventId, uint256 _candidateId) public {
+    function addCandidate(uint256 _eventId, uint256 _candidateId) onlyPersonWithAccess(msg.sender) public {
         VoteEventDetail storage voteEvent = voteEventDetails[_eventId];
         voteEvent.candidateVotes[_candidateId] = 0;
     }
@@ -75,7 +76,7 @@ contract VoteEventProcessor {
         return voteEventDetails[_eventId].totalVotes;
     }
 
-    function deactivateVoteEvent(uint _eventId) public
+    function deactivateVoteEvent(uint _eventId) onlyModerator(msg.sender) public
     {
         voteEventDetails[_eventId].status = VoteEventStatus.Deactivated;
     }

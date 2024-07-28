@@ -1,10 +1,11 @@
 import { expect } from "chai";
-import { ethers } from "hardhat";
+import { ethers, network } from "hardhat";
 import {loadFixture} from "@nomicfoundation/hardhat-toolbox/network-helpers";
 
 describe('Vote Event Processor', () => 
 {
     var voteEventProcessor: any;
+    var vote: any;
     var admin: any;
     var moderator: any;
     var user: any;
@@ -12,13 +13,20 @@ describe('Vote Event Processor', () =>
     {
         [admin, moderator, user] = await ethers.getSigners();
         var Vote = await ethers.getContractFactory('Vote');
-        var vote = await Vote.deploy();
+        vote = await Vote.deploy();
         vote.waitForDeployment();
-
         var voteAddress = await vote.getAddress();
         var VoteEventProcessor = await ethers.getContractFactory('VoteEventProcessor');
         voteEventProcessor = await VoteEventProcessor.deploy(voteAddress);
         voteEventProcessor.waitForDeployment();
+
+        let adminAddress = await admin.getAddress();
+        let moderatorAddress = await moderator.getAddress();
+        
+        let moderatorRole = await voteEventProcessor.connect(admin).MODERATOR_ROLE();
+        await voteEventProcessor.connect(admin).grantModeratorRole(adminAddress, moderatorAddress);
+        let roleGrantedCorrectly = await voteEventProcessor.hasRole(moderatorRole, moderator);
+        expect(roleGrantedCorrectly).to.be.equal(roleGrantedCorrectly);
     }
 
     async function createVoteEventFixture()

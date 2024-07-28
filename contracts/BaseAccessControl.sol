@@ -8,36 +8,42 @@ contract BaseAccessControl is AccessControl
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN");
     bytes32 public constant MODERATOR_ROLE = keccak256("MODERATOR");
 
-    constructor()
+    constructor(address _admin)
     {
-        _setupRole(ADMIN_ROLE, msg.sender);
+        _setupRole(ADMIN_ROLE, _admin);
         _setRoleAdmin(MODERATOR_ROLE, ADMIN_ROLE);
     }
 
-    modifier onlyAdmin()
+    modifier onlyAdmin(address _caller)
     {
-        require(hasRole(ADMIN_ROLE, msg.sender), "You don't have access for this action");
+        require(hasRole(ADMIN_ROLE, _caller), "You don't have access for this action");
         _;
     }
 
-    modifier onlyModerator()
+    modifier onlyModerator(address _caller)
     {
-        require(hasRole(MODERATOR_ROLE, msg.sender), "You don't have access for this action");
+        require(hasRole(MODERATOR_ROLE, _caller), "You don't have access for this action");
         _;
     }
 
-    modifier onlyPersonWithAccess()
+    modifier onlyPersonWithAccess(address _caller)
     {
-        require(hasRole(MODERATOR_ROLE, msg.sender) || hasRole(ADMIN_ROLE, msg.sender), "You don't have access for this action");
+        require(hasRole(MODERATOR_ROLE, _caller) || hasRole(ADMIN_ROLE, _caller), "You don't have access for this action");
         _;
     }
 
-    function grantModeratorRole(address _moderator) public onlyAdmin()
+    modifier onlyUser(address _caller)
     {
-        grantRole(MODERATOR_ROLE, _moderator);
+        require(!(hasRole(ADMIN_ROLE, _caller) || hasRole(MODERATOR_ROLE, _caller)), "Moderators or admins can't call this function");
+        _;
     }
 
-    function revokeModeratorRole(address _moderator) public onlyAdmin()
+    function grantModeratorRole(address _caller, address _moderator) public onlyAdmin(_caller)
+    {
+        _grantRole(MODERATOR_ROLE, _moderator);
+    }
+    
+    function revokeModeratorRole(address _caller, address _moderator) public onlyAdmin(_caller)
     {
         revokeRole(MODERATOR_ROLE, _moderator);
     }
