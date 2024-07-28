@@ -31,7 +31,7 @@ describe('Vote Event Processor', () =>
 
     async function createVoteEventFixture()
     {
-        var url: string = "";
+        var url: string = "https://ipfs.io/ipfs/QmSLd8TZgsuP9tSGn1v2Mmx3RhfFRXP2EJsVN2L1FWdm4i";
         await voteEventProcessor.connect(admin).addNewEvent(url);
     }
 

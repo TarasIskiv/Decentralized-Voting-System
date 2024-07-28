@@ -1,0 +1,19 @@
+{
+    "name": "Alice Johnson",
+    "image": "https://ipfs.io/ipfs/Qmbk3JF9BjdjFmdm6RpL2mBennFXN9PVxtE1YrBJUeCNec/1.png",
+    "description": "A senior software engineer with over 10 years of experience in the tech industry.",
+    "attributes": [
+        {
+            "property": "age",
+            "value": "35"
+        },
+        {
+            "property": "sex",
+            "value": "Female"
+        },
+        {
+            "property": "area of expertise",
+            "value": "Software Engineering"
+        }
+    ]
+}

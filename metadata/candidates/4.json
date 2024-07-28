@@ -1,0 +1,19 @@
+{
+    "name": "Diana Green",
+    "image": "https://ipfs.io/ipfs/Qmbk3JF9BjdjFmdm6RpL2mBennFXN9PVxtE1YrBJUeCNec/4.png",
+    "description": "An experienced financial analyst with a strong background in investment strategies.",
+    "attributes": [
+        {
+            "property": "age",
+            "value": "30"
+        },
+        {
+            "property": "sex",
+            "value": "Female"
+        },
+        {
+            "property": "area of expertise",
+            "value": "Finance"
+        }
+    ]
+}
