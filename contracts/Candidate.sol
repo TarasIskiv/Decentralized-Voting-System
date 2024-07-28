@@ -12,6 +12,7 @@ contract Candidate is ERC721URIStorage, IERC721Receiver, BaseAccessControl {
     using Counters for Counters.Counter;
 
     Counters.Counter private tokenIds;
+    uint256 public totalSupply = 0;
 
     constructor() ERC721("Candidate", "CND") {}
 
@@ -21,6 +22,7 @@ contract Candidate is ERC721URIStorage, IERC721Receiver, BaseAccessControl {
         _safeMint(address(this), tokenId);
         _setTokenURI(tokenId, _url);
 
+        totalSupply = tokenId;
         return tokenId;
     }
 
