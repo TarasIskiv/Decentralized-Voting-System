@@ -16,12 +16,14 @@ async function main()
     const baseAccessControl: any = await BaseAccessControl.deploy(adminAddress);
     await baseAccessControl.waitForDeployment();
     console.log('BaseAccessControl has been deployed');
+    console.log(await baseAccessControl.getAddress());
 
     //Candidate Deployment
     const Candidate = await ethers.getContractFactory('Candidate');
     const candidate: any = await Candidate.deploy();
     await candidate.waitForDeployment();
     console.log('Candidate has been deployed');
+    console.log(await candidate.getAddress());
 
     //Minting Candidates
     for(var i = 0; i < TOTAL_CANDIDATES; ++i)
@@ -35,6 +37,7 @@ async function main()
     const vote: any = await Vote.deploy();
     await vote.waitForDeployment();
     console.log('Vote has been deployed');
+    console.log(await vote.getAddress());
 
     //VoteEventProcessor Deployment
     const voteAddress = await vote.getAddress();
@@ -48,7 +51,7 @@ async function main()
 
     //Mint Vote Event
     await voteEventProcessor.connect(admin).addNewEvent(voteEventUrl);
-
+    console.log(await voteEventProcessor.getAddress());
     console.log('Deployemnt finished');
 }
 
