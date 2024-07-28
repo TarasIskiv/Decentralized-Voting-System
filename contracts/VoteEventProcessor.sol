@@ -27,9 +27,10 @@ contract VoteEventProcessor {
     }
 
     receive() external payable {}
+    fallback() external payable {}
 
     modifier isDeactivated(uint256 _eventId) {
-        require(voteEventDetails[_eventId].status == VoteEventStatus.Active, "You can't remove active event");
+        require(voteEventDetails[_eventId].status == VoteEventStatus.Deactivated, "You can't remove active event");
         _;
     }
 
@@ -41,7 +42,7 @@ contract VoteEventProcessor {
         voteEvent.id = tokenId;
         voteEvent.status = VoteEventStatus.Active;
         voteEvent.totalVotes = 0;
-        voteEvent.voteFee = 1000000 gwei;
+        voteEvent.voteFee = 1000000000000000 wei;
     }
 
     function removeEvent(uint256 _tokenId) public isDeactivated(_tokenId) 
@@ -50,14 +51,12 @@ contract VoteEventProcessor {
         delete voteEventDetails[_tokenId];
     }
 
-    function vote(uint256 _eventId, uint256 _candidateId) public {
+    function vote(uint256 _eventId, uint256 _candidateId) public payable {
         VoteEventDetail storage selectedEvent = voteEventDetails[_eventId];
         require(selectedEvent.status == VoteEventStatus.Active, "Event is no longer active");
         require(msg.sender.balance >= selectedEvent.voteFee, "You don't have enough money to vote");
 
         require(selectedEvent.candidateVotes[_candidateId] >= 0, "Candidate doesn't take part in the event");
-
-        payable(msg.sender).transfer(selectedEvent.voteFee);
 
         selectedEvent.candidateVotes[_candidateId]++;
         selectedEvent.totalVotes++;
@@ -79,5 +78,15 @@ contract VoteEventProcessor {
     function deactivateVoteEvent(uint _eventId) public
     {
         voteEventDetails[_eventId].status = VoteEventStatus.Deactivated;
+    }
+
+    function getEventId(uint256 _eventId) public view returns(uint256)
+    {
+        return voteEventDetails[_eventId].id;
+    }
+
+    function getEventStatus(uint256 _eventId) public view returns(VoteEventStatus)
+    {
+        return voteEventDetails[_eventId].status;
     }
 }

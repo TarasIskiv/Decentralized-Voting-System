@@ -2,6 +2,7 @@ import { HardhatUserConfig } from "hardhat/types";
 import "@nomiclabs/hardhat-ethers";
 import "@typechain/hardhat";
 import "@typechain/ethers-v6";
+import "@nomicfoundation/hardhat-ethers";
 
 const config: HardhatUserConfig = {
   solidity: "0.8.26",
