@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+
+.header
+{
+  padding: .5em 1em;
+  background: rgba(174, 45, 253, 0.9948354341736695);
+  border-bottom: solid;
+
+  button
+  {
+    border: solid;
+  }
+}
