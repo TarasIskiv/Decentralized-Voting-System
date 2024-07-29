@@ -48,3 +48,13 @@
     border: solid;
   }
 }
+
+.home
+{
+    padding: 5em;
+}
+
+.search
+{
+  width: 50%;
+}

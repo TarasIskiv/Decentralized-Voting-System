@@ -1,18 +1,13 @@
 import { useState } from "react";
 import { ethers } from 'ethers';
 
-const Header = () =>
+const Header = ({ account, setAccount }) =>
 {
-    const [connected, setConnected] = useState(false);
-    const [account, setAccount] = useState(null);
     const connectWallet = async () => 
     {
         const accounts = await window.ethereum.request({method: 'eth_requestAccounts'});
-        const account = await ethers.getAddress(accounts[0]);
-        //connect wallet
-        setConnected(true);
-        setAccount(account);
-        console.log(account);
+        const selectedAccount = await ethers.getAddress(accounts[0]);
+        setAccount(selectedAccount);
     }
 
 
@@ -23,7 +18,6 @@ const Header = () =>
                 account ?
                 (<button className="btn btn-success" onClick={connectWallet}>{account.slice(0, 6) + '...' + account.slice(38, 42)}</button>) :
                 (<button className="btn btn-primary" onClick={connectWallet}>Connect</button>) 
-                
             }
         </div>
     )
