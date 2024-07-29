@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Search from './Search';
+import Votes from './Votes';
 
 const Home = () => 
 {
@@ -12,7 +13,7 @@ const Home = () =>
   return (
    <div className='home'>
       <Search onSearchChanged={handleSearchChange}/>
-      <p>{search}</p>
+      <Votes/>
    </div>
   );
 }
