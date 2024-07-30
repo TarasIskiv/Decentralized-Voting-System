@@ -16,6 +16,15 @@ const config: HardhatUserConfig = {
     outDir: "typechain", 
     target: "ethers-v6", 
   },
+  networks: {
+    hardhat: {
+        chainId: 31337 
+    },
+    localhost: {
+        url: "http://localhost:8545",
+        chainId: 31337
+    }
+}
 };
 
 export default config;

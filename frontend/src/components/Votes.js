@@ -1,32 +1,41 @@
 import { useEffect, useState } from "react";
-// If exported as a default export
+import {ethers} from 'ethers';
 import SingleEvent from './SingleEvent';
+import config from '../config.json';
+import VoteEventProcessor from '../abis/VoteEventProcessor.json';
 
 const Votes = () => 
 {
     const [votes, setVotes] = useState([]);
-
-    const loadVotes = () => 
+    
+    const loadVotes =  async () => 
     {
-        //real loading process
+        try {
+            if (!window.ethereum) {
+                console.error('Ethereum provider not found. Make sure you have MetaMask installed.');
+                return;
+            }
+       
+            const provider = new ethers.BrowserProvider(window.ethereum);
+            const signer = await provider.getSigner(); // Create a signer from the provider
+            const network = await provider.getNetwork();
+            const voteEventProcessorAddress = config[Number(network.chainId)]?.voteEventProcessor?.address;
 
-        let tempVotes = [{
-            id: 1,
-            name: "Hello",
-            desc: "djjd",
-        },
-        {
-            id: 2,
-            name: "AAAA",
-            desc: "ds",
-        },
-        {
-            id: 3,
-            name: "POPOP",
-            desc: "ssss",
-        }];
-        debugger;
-        setVotes(tempVotes);
+            if (!voteEventProcessorAddress) {
+                console.error('VoteEventProcessor address not found for the current network.');
+                return;
+            }
+            const admin = 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266;
+            debugger;
+            console.log(voteEventProcessorAddress)
+            console.log(0xa513E6E4b8f2a923D98304ec87F64353C4D5C853)
+            const voteEventProcessor = new ethers.Contract(voteEventProcessorAddress, VoteEventProcessor, signer);
+            var voteEvents = await voteEventProcessor.getVotesShortInfo();
+
+            setVotes(voteEvents);
+        } catch (error) {
+            console.error('Failed to fetch votes:', error);
+        }
     }
 
     const chunkArray = () => 

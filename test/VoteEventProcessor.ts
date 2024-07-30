@@ -55,6 +55,22 @@ describe('Vote Event Processor', () =>
             expect(Number(transaction)).to.be.equal(1);
         });
 
+        it('Getting Short Data', async() => 
+        {
+            var voteEvents = await voteEventProcessor.connect(admin).getVotesShortInfo();
+            expect(voteEvents.length).to.be.equal(1);
+
+            var addedVote = voteEvents[0];
+            expect(Number(addedVote.id)).to.be.equal(1);
+
+            const expectedFee = ethers.getBigInt('1000000000000000');
+            expect(Number(addedVote.voteFee)).to.be.equal(Number(expectedFee));
+            expect(Number(addedVote.totalVotes)).to.be.equal(0);
+
+            var expectedUri = "https://ipfs.io/ipfs/QmSLd8TZgsuP9tSGn1v2Mmx3RhfFRXP2EJsVN2L1FWdm4i/1.json";
+            expect(addedVote.tokenURI).to.be.equal(expectedUri);
+        });
+
         it('Deactivation Vote Event', async() => 
         {
             await voteEventProcessor.connect(moderator).deactivateVoteEvent(1);

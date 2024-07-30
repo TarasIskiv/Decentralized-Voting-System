@@ -17,7 +17,9 @@ function App()
   return (
     <div className="App">
       <Header account={account} setAccount={setAccount}/>
-      <Home />
+      {account ? 
+        (<Home />) : (<div>Connect your wallet</div>)
+      }
     </div>
   );
 }
