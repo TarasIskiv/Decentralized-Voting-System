@@ -3,7 +3,7 @@ import {ethers} from "hardhat"
 
 describe('Candidate', () => 
 {
-    const url: string = "https://ipfs.io/ipfs/Qmai9iwTXbPkim9nuNjtmSSRK11QBJBSavMTnqnZbey3Qe/1.json"
+    const url: string = "https://ipfs.io/ipfs/QmWeA3L3UuM5F6dL8FWLkFhmXmTrU15otBpspHRrks5Chm/1.json"
     it('Registration', async() => 
     {
         let signers = await ethers.getSigners();

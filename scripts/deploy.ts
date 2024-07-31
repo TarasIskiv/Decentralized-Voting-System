@@ -3,8 +3,8 @@ import {ethers} from "hardhat";
 async function main()
 {
     const TOTAL_CANDIDATES: number = 4;
-    const candidateBaseUrl: string = "https://ipfs.io/ipfs/Qmai9iwTXbPkim9nuNjtmSSRK11QBJBSavMTnqnZbey3Qe"
-    const voteEventUrl: string = "https://ipfs.io/ipfs/QmSLd8TZgsuP9tSGn1v2Mmx3RhfFRXP2EJsVN2L1FWdm4i/1.json";
+    const candidateBaseUrl: string = "https://ipfs.io/ipfs/QmWeA3L3UuM5F6dL8FWLkFhmXmTrU15otBpspHRrks5Chm"
+    const voteEventUrl: string = "https://ipfs.io/ipfs/QmPzxyHbEHXEjLsQmLSHV3Mn7UHJVzvczbto72unvnx4aD/1.json";
 
     const [admin, moderator, user] = await ethers.getSigners();
 

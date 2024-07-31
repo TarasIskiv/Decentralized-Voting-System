@@ -25,10 +25,6 @@ const Votes = () =>
                 console.error('VoteEventProcessor address not found for the current network.');
                 return;
             }
-            const admin = 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266;
-            debugger;
-            console.log(voteEventProcessorAddress)
-            console.log(0xa513E6E4b8f2a923D98304ec87F64353C4D5C853)
             const voteEventProcessor = new ethers.Contract(voteEventProcessorAddress, VoteEventProcessor, signer);
             var voteEvents = await voteEventProcessor.getVotesShortInfo();
 
@@ -59,7 +55,7 @@ const Votes = () =>
                 {rows.map((row, index) => (
                     <div className="row" style={{height: '30vh'}} key={index}>
                         {row.map((vote, voteIndex) => (
-                            <div className="col-sm" key={voteIndex}>
+                            <div className="col-sm" style={{maxWidth: '33%'}} key={voteIndex}>
                                 <SingleEvent vote={vote} />
                             </div>
                         ))}

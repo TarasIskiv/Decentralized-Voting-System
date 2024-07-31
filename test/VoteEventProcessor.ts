@@ -31,7 +31,7 @@ describe('Vote Event Processor', () =>
 
     async function createVoteEventFixture()
     {
-        var url: string = "https://ipfs.io/ipfs/QmSLd8TZgsuP9tSGn1v2Mmx3RhfFRXP2EJsVN2L1FWdm4i/1.json";
+        var url: string = "https://ipfs.io/ipfs/QmPzxyHbEHXEjLsQmLSHV3Mn7UHJVzvczbto72unvnx4aD/1.json";
         await voteEventProcessor.connect(admin).addNewEvent(url);
     }
 
@@ -67,7 +67,7 @@ describe('Vote Event Processor', () =>
             expect(Number(addedVote.voteFee)).to.be.equal(Number(expectedFee));
             expect(Number(addedVote.totalVotes)).to.be.equal(0);
 
-            var expectedUri = "https://ipfs.io/ipfs/QmSLd8TZgsuP9tSGn1v2Mmx3RhfFRXP2EJsVN2L1FWdm4i/1.json";
+            var expectedUri = "https://ipfs.io/ipfs/QmPzxyHbEHXEjLsQmLSHV3Mn7UHJVzvczbto72unvnx4aD/1.json";
             expect(addedVote.tokenURI).to.be.equal(expectedUri);
         });
 
