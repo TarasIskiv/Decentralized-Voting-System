@@ -3,6 +3,8 @@ import Home from './Home';
 import Header from './Header';
 import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import EventPage from './EventPage';
 
 function App() 
 {
@@ -18,7 +20,16 @@ function App()
     <div className="App">
       <Header account={account} setAccount={setAccount}/>
       {account ? 
-        (<Home />) : (<div>Connect your wallet</div>)
+      (
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/home' element={<Home />} />
+        <Route path='/voteEvent/:voteEventId' element={<EventPage />} /> 
+        <Route path='*' element={<div></div>}/>
+      </Routes>
+      )
+        :
+         (<div>Connect your wallet</div>)
       }
     </div>
   );
