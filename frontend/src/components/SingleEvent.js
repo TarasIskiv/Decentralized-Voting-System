@@ -35,7 +35,7 @@ const SingleEvent = ({vote}) =>
             <div style={{height: '75%'}}>
                 <img style={{width: '100%', height: '100%'}} className='singleEvent' src={imageUrl} alt='Event doenst contain wallpaper'></img>
             </div>
-            <div className="d-flex justify-content-between align-items-center" style={{height: '25%', padding: '0em 2em'}}>
+            <div className="d-flex justify-content-between align-items-center vote-details" style={{height: '25%', padding: '0em 2em'}}>
                 <div className='vote-event-container votes-count'>{formattedVote.totalVotes} Votes</div>
                 <div className="vote-event-container">
                     <h6 className="price">{getEthPrice(formattedVote.voteFee)}</h6>

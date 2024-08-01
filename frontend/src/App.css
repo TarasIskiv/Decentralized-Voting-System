@@ -61,9 +61,13 @@
 
 .singleEvent
 {
-  background-color: red;
+  background-color: rgb(255, 255, 255);
   height: 100%;
   border-radius: 12%;
+  border-bottom: solid;
+  border-left: solid;
+  border-right: solid;
+  height: 50vh;
 }
 
 .vote-event-container {
