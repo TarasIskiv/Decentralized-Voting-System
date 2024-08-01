@@ -5,15 +5,14 @@ import Votes from './Votes';
 const Home = () => 
 {
   const [search, setSearch] = useState("");
-  const handleSearchChange = (fsearch) =>
+  const handleSearchChange = (currentSearch) => 
   {
-    setSearch(fsearch);
-    console.log(fsearch);
+    setSearch(currentSearch);
   }
   return (
    <div className='home'>
       <Search onSearchChanged={handleSearchChange}/>
-      <Votes/>
+      <Votes search={search}/>
    </div>
   );
 }

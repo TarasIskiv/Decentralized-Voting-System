@@ -4,7 +4,7 @@ import SingleEvent from './SingleEvent';
 import config from '../config.json';
 import VoteEventProcessor from '../abis/VoteEventProcessor.json';
 
-const Votes = () => 
+const Votes = ({search}) => 
 {
     const [votes, setVotes] = useState([]);
     
@@ -56,7 +56,7 @@ const Votes = () =>
                     <div className="row" style={{height: '30vh'}} key={index}>
                         {row.map((vote, voteIndex) => (
                             <div className="col-sm" style={{maxWidth: '33%'}} key={voteIndex}>
-                                <SingleEvent vote={vote} />
+                                <SingleEvent vote={vote} search={search} />
                             </div>
                         ))}
                     </div>
