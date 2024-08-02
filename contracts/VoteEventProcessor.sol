@@ -27,6 +27,8 @@ struct VoteEventShortDetails
 contract VoteEventProcessor is BaseAccessControl
 {
     mapping(uint256 => VoteEventDetails) private voteEventDetails;
+    mapping(uint256 => uint256[]) private eventCandidates;
+
     uint256[] keys;
 
     Vote private voteContract;
@@ -89,6 +91,7 @@ contract VoteEventProcessor is BaseAccessControl
     function addCandidate(uint256 _eventId, uint256 _candidateId) onlyPersonWithAccess(msg.sender) public {
         VoteEventDetails storage voteEvent = voteEventDetails[_eventId];
         voteEvent.candidateVotes[_candidateId] = 0;
+        eventCandidates[_eventId].push(_candidateId);
     }
 
     function getCandidateVotes(uint256 _eventId, uint256 _candidateId) public view returns (uint256) {
@@ -131,5 +134,21 @@ contract VoteEventProcessor is BaseAccessControl
             voteEventShortDetails[i] = shortDetails;
         }
         return voteEventShortDetails;
+    }
+
+    function getVoteShortInfo(uint256 _voteEventId) public view returns (VoteEventShortDetails memory)
+    {
+        return VoteEventShortDetails(
+            {
+                id: _voteEventId,
+                totalVotes: voteEventDetails[_voteEventId].totalVotes,
+                voteFee: voteEventDetails[_voteEventId].voteFee,
+                tokenURI: voteContract.tokenURI(_voteEventId)
+            });
+    }
+
+    function getEventCandidates(uint256 _voteEventId) public view returns (uint256[] memory)
+    {
+        return eventCandidates[_voteEventId];
     }
 }

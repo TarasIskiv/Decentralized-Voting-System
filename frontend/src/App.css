@@ -94,3 +94,44 @@
   margin-right: 8px; 
   margin-bottom: 0.5em;
 }
+
+.vote-event-content
+{
+  padding: 3em 5em;
+}
+
+.vote-event-details
+{
+  height: 30vh;
+  padding-top: 2em;
+}
+
+.vote-event-wall
+{
+  border-radius: 12%;
+  border-bottom: solid;
+  border-left: solid;
+  border-right: solid;
+}
+
+.vote-event-wall-container
+{
+  height: 100%;
+}
+
+.vote-event-desc
+{
+  border: solid;
+  border-radius: 25px;
+  font-family: monospace;
+  text-align: left;
+  padding: .5em;
+  height: fit-content;
+}
+
+.vote-event-title
+{
+  font-family: monospace;
+  font-weight: bold;
+  font-size: 24px;
+}

@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import { ethers, network } from "hardhat";
 import {loadFixture} from "@nomicfoundation/hardhat-toolbox/network-helpers";
+import { equal } from "assert";
 
 describe('Vote Event Processor', () => 
 {
@@ -53,6 +54,20 @@ describe('Vote Event Processor', () =>
 
             var transaction: number = await voteEventProcessor.connect(admin).getEventId(1);
             expect(Number(transaction)).to.be.equal(1);
+        });
+
+        it('Get Signle Event Details', async() => 
+        {
+            const event = await voteEventProcessor.connect(user).getVoteShortInfo(1);
+
+            const expectedFee = ethers.getBigInt('1000000000000000');
+            
+            expect(Number(event.id)).to.be.equal(1);
+            expect(Number(event.totalVotes)).to.be.equal(0);
+            expect(Number(event.voteFee)).to.be.equal(Number(expectedFee));
+            
+            var expectedUri = "https://ipfs.io/ipfs/QmPzxyHbEHXEjLsQmLSHV3Mn7UHJVzvczbto72unvnx4aD/1.json";
+            expect(event.tokenURI).to.be.equal(expectedUri);
         });
 
         it('Getting Short Data', async() => 
@@ -120,6 +135,12 @@ describe('Vote Event Processor', () =>
         it('Get Total Votes', async () => {
             const totalVotes = await voteEventProcessor.connect(user).getTotalVotes(1);
             expect(Number(totalVotes)).to.be.equal(1);
+        });
+
+        it('Get Event Candidates', async() => 
+        {
+            const candidates = await voteEventProcessor.connect(user).getEventCandidates(1);
+            expect(Number(candidates.length)).to.be.equal(2);
         });
     });
 });

@@ -1,8 +1,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import {useEffect, useState} from 'react'
+import { useNavigate } from 'react-router-dom';
+
+
 const SingleEvent = ({vote, search}) => 
 {
+    const navigate = useNavigate();
+
     const [formattedVote, setFormattedVote] = useState(
         {
             id: Number(vote[0]),
@@ -38,13 +43,18 @@ const SingleEvent = ({vote, search}) =>
 
     const getEthPrice = (priceInWei) => priceInWei / 1000000000000000000;
     
+    const goToEvent = () =>
+    {
+        if(isVisible) navigate(`/voteEvent/${vote.id}`);
+    }
+
     useEffect(() => 
     {
         fetchMetadata()
     }, [search])
 
     return (
-        <div className="singleEvent" style={{ display: isVisible ? 'block' : 'none' }}>
+        <div className="singleEvent" style={{ display: isVisible ? 'block' : 'none' }} onClick={goToEvent} >
             <div style={{height: '75%'}}>
                 <img style={{width: '100%', height: '100%'}} className='singleEvent' src={formattedVote.imageUrl} alt='Event doenst contain wallpaper'></img>
             </div>
