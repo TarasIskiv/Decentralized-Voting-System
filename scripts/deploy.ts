@@ -51,6 +51,8 @@ async function main()
 
     //Mint Vote Event
     await voteEventProcessor.connect(admin).addNewEvent(voteEventUrl);
+    await voteEventProcessor.connect(admin).addCandidate(1, 1);
+    await voteEventProcessor.connect(admin).addCandidate(1, 2);
     console.log(await voteEventProcessor.getAddress());
     console.log('Deployemnt finished');
 }

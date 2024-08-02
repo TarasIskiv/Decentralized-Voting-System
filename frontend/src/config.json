@@ -1,16 +1,16 @@
 {
     "31337": {
         "baseAccessControl": {
-            "address": "0xE6E340D132b5f46d1e472DebcD681B2aBc16e57E"
+            "address": "0x70e0bA845a1A0F2DA3359C97E0285013525FFC49"
         },
         "candidate": {
-            "address": "0xc3e53F4d16Ae77Db1c982e75a937B9f60FE63690"
+            "address": "0x4826533B4897376654Bb4d4AD88B7faFD0C98528"
         },
         "vote": {
-            "address": "0x851356ae760d987E095750cCeb3bC6014560891C"
+            "address": "0x5eb3Bc0a489C5A8288765d2336659EbCA68FCd00"
         },
         "voteEventProcessor": {
-            "address": "0xf5059a5D33d5853360D16C683c16e67980206f36"
+            "address": "0x36C02dA8a0983159322a80FFE9F24b1acfF8B570"
         }
     }
 }

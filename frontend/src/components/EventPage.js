@@ -3,8 +3,10 @@ import { useParams } from 'react-router-dom';
 import { ethers } from 'ethers';
 import config from '../config.json';
 import VoteEventProcessor from '../abis/VoteEventProcessor.json';
+import Candidate from '../abis/Candidate.json';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
+import SingleCandidate from "./SingleCandidate";
 
 const EventPage = () =>
 {
@@ -19,6 +21,8 @@ const EventPage = () =>
         description: "",
         name: ""
     });
+
+    const [candidates, setCandidates] = useState([]);
 
     const[loading, setLoading] = useState(true);
 
@@ -44,10 +48,6 @@ const EventPage = () =>
 
             var metadata = await loadMeta(shortInfo[3]);
 
-            console.log(metadata.image);
-            console.log(metadata.description);
-            console.log(metadata.name);
-
             setVoteEvent(
             {
                 id: Number(shortInfo[0]),
@@ -60,7 +60,6 @@ const EventPage = () =>
             });
 
             setLoading(false);
-            console.log(vote[1]);
         } catch (error) {
             console.error('Failed to fetch votes:', error);
         }
@@ -83,7 +82,66 @@ const EventPage = () =>
 
     const loadCandidates = async () => 
     {
-        
+        try {
+            if (!window.ethereum) {
+                console.error('Ethereum provider not found. Make sure you have MetaMask installed.');
+                return;
+            }
+       
+            const provider = new ethers.BrowserProvider(window.ethereum);
+            const signer = await provider.getSigner(); // Create a signer from the provider
+            const network = await provider.getNetwork();
+            const voteEventProcessorAddress = config[Number(network.chainId)]?.voteEventProcessor?.address;
+
+            if (!voteEventProcessorAddress) {
+                console.error('VoteEventProcessor address not found for the current network.');
+                return;
+            }
+            const voteEventProcessor = new ethers.Contract(voteEventProcessorAddress, VoteEventProcessor, signer);
+            var candidates = await voteEventProcessor.getEventCandidates(voteEventId);
+            await fillOutCandidateDetails(voteEventProcessor, candidates);
+            
+        } catch (error) {
+            console.error('Failed to fetch candidates:', error);
+        }
+    }
+
+    const fillOutCandidateDetails = async(voteEventProcessor, candidates) => 
+    {
+        let freshCandidates = [];
+        for(let i = 0; i < candidates.length; ++i)
+        {
+            let candidateVotes = await voteEventProcessor.getCandidateVotes(voteEventId, candidates[i]);
+            let uri = await loadCandidateMetaURI(candidates[i]);
+            let candidateMeta = await loadMeta(uri);
+            let candidate = 
+            {
+                id: Number(candidates[i]),
+                name: candidateMeta.name,
+                description: candidateMeta.description,
+                image: candidateMeta.image,
+                personalityInfo: candidateMeta.attributes,
+                votes: Number(candidateVotes)
+            };
+            freshCandidates.push(candidate);
+        }
+
+        setCandidates(freshCandidates);
+    }
+
+    const loadCandidateMetaURI = async (candidateId) => 
+    {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner(); 
+        const network = await provider.getNetwork();
+        const candidateAddress = config[Number(network.chainId)]?.candidate?.address;
+
+        if (!candidateAddress) {
+            console.error('VoteEventProcessor address not found for the current network.');
+            return;
+        }
+        const voteEventProcessor = new ethers.Contract(candidateAddress, Candidate, signer);
+        return await voteEventProcessor.tokenURI(candidateId);
     }
 
     const vote = (candidateId) => 
@@ -91,7 +149,16 @@ const EventPage = () =>
         
     }
 
-    useEffect(() => {loadEventDetails()}, [voteEventId]);
+    useEffect(() => 
+        {
+            const fetchData = async () => 
+            {
+                await loadEventDetails();
+                await loadCandidates();
+            };
+    
+            fetchData()
+        }, [voteEventId]);
     
     return (
         <div>
@@ -124,9 +191,10 @@ const EventPage = () =>
                 </div>
               </div>
               <hr />
-              <div>
-                {/* Add meaningful content */}
-                <span>Candidates</span>
+              <div style={{overflow: 'scroll', maxHeight: '40vh'}}>
+                {candidates.map((candidate,index) => (
+                    <SingleCandidate candidate={candidate} />
+                ))}
               </div>
             </div>
           )}
