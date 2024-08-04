@@ -178,3 +178,8 @@ p > span
 {
   font-weight: bold;
 }
+
+.action-btn
+{
+  margin-right: .5em;
+}

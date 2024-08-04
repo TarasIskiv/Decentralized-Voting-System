@@ -47,4 +47,14 @@ contract BaseAccessControl is AccessControl
     {
         revokeRole(MODERATOR_ROLE, _moderator);
     }
+
+    function isAdmin() public view returns(bool)
+    {
+        return (hasRole(ADMIN_ROLE, msg.sender));
+    }
+
+    function isModerator() public view returns(bool)
+    {
+        return (hasRole(MODERATOR_ROLE, msg.sender));
+    }
 }

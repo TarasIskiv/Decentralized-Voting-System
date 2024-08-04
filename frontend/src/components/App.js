@@ -5,8 +5,8 @@ import { ethers } from 'ethers';
 import { useContext, useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import EventPage from './EventPage';
+import ManageEvents from './ManageEvents';
 import { AccountProvider, AccountContext } from '../contexts/AccountContext';
-
 function App() {
   // The provider should be at the top level of the app, wrapping the BrowserRouter
   return (
@@ -53,7 +53,8 @@ const AppRoutes = () => {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/home' element={<Home />} />
-        <Route path='/voteEvent/:voteEventId' element={<EventPage />} />
+        <Route path='/voteEvent/:voteEventId' element={<EventPage />} /> 
+        <Route path='/manageEvents/' element={<ManageEvents />} /> 
       </Routes>
     ) : (
       <div>Connect your wallet</div>
