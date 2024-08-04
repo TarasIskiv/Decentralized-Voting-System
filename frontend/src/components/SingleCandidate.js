@@ -1,5 +1,9 @@
-const SingleCandidate = ({candidate}) =>
+const SingleCandidate = ({candidate, onVoteClicked}) =>
 {
+    const handleVote = () =>
+    {
+        onVoteClicked(candidate.id);
+    }
     return (
         <div className='single-candidate container'>
             <div className="row">
@@ -19,7 +23,7 @@ const SingleCandidate = ({candidate}) =>
                 </div>
                 <div className="col">
                     <div className="d-flex justify-content-center align-items-center h-100">
-                        <button className="btn btn-primary vote-btn">Vote</button>
+                        <button className="btn btn-primary vote-btn" onClick={handleVote}>Vote</button>
                     </div>
                 </div>
             </div>

@@ -144,9 +144,22 @@ const EventPage = () =>
         return await voteEventProcessor.tokenURI(candidateId);
     }
 
-    const vote = (candidateId) => 
+    const vote = async (candidateId) => 
     {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner(); 
+        const network = await provider.getNetwork();
+
+        const voteEventProcessorAddress = config[Number(network.chainId)]?.voteEventProcessor?.address;
+
+        if (!voteEventProcessorAddress) 
+        {
+            console.error('VoteEventProcessor address not found for the current network.');
+            return;
+        }
         
+        const voteEventProcessor = new ethers.Contract(voteEventProcessorAddress, VoteEventProcessor, signer);
+        //call vote action
     }
 
     useEffect(() => 
@@ -193,7 +206,7 @@ const EventPage = () =>
               <hr />
               <div style={{overflow: 'scroll', maxHeight: '40vh'}}>
                 {candidates.map((candidate,index) => (
-                    <SingleCandidate candidate={candidate} />
+                    <SingleCandidate candidate={candidate} onVoteClicked={vote} />
                 ))}
               </div>
             </div>
