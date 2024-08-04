@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
 import { ethers } from 'ethers';
 import config from '../config.json';
@@ -7,9 +7,12 @@ import Candidate from '../abis/Candidate.json';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import SingleCandidate from "./SingleCandidate";
+import { AccountContext } from "../contexts/AccountContext";
 
 const EventPage = () =>
 {
+    const {account} = useContext(AccountContext);
+
     const { voteEventId } = useParams();
     const [voteEvent, setVoteEvent] = useState(
     {
@@ -160,6 +163,7 @@ const EventPage = () =>
         
         const voteEventProcessor = new ethers.Contract(voteEventProcessorAddress, VoteEventProcessor, signer);
         //call vote action
+        await voteEventProcessor.vote(voteEventId, candidateId, {value: voteEvent.voteFee});
     }
 
     useEffect(() => 
