@@ -1,13 +1,17 @@
-import { useState } from "react";
+import { useContext } from "react";
 import { ethers } from 'ethers';
-
-const Header = ({ account, setAccount }) =>
+import { AccountContext } from "../contexts/AccountContext";
+const Header = () =>
 {
+    const { account, setAccount } = useContext(AccountContext);
+
     const connectWallet = async () => 
     {
-        const accounts = await window.ethereum.request({method: 'eth_requestAccounts'});
-        const selectedAccount = await ethers.getAddress(accounts[0]);
-        setAccount(selectedAccount);
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        if (accounts.length > 0) {
+            const selectedAccount = ethers.getAddress(accounts[0]);
+            setAccount(selectedAccount); // Update the account in context
+        }
     }
 
 
