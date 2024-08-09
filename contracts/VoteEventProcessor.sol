@@ -16,9 +16,17 @@ struct VoteEventDetails {
     mapping(uint256 => uint256) candidateVotes; // Nested mapping inside the struct
 }
 
+struct VoteCounts
+{
+    uint256 total;
+    uint256 active;
+    uint256 deactivated;
+}
+
 struct VoteEventShortDetails
 {
     uint256 id;
+    VoteEventStatus status;
     uint256 totalVotes;
     uint256 voteFee;
     string tokenURI;
@@ -117,21 +125,26 @@ contract VoteEventProcessor is BaseAccessControl
         return voteEventDetails[_eventId].status;
     }
 
-    function getVotesShortInfo()public view returns(VoteEventShortDetails[] memory)
+    function getVotesShortInfo(VoteEventStatus _status) public view returns(VoteEventShortDetails[] memory)
     {
         VoteEventShortDetails[] memory voteEventShortDetails = new VoteEventShortDetails[](keys.length);
         for(uint256 i = 0; i < keys.length; ++i)
         {
             uint256 key = keys[i];
             VoteEventDetails storage details = voteEventDetails[key];
-            VoteEventShortDetails memory shortDetails =  VoteEventShortDetails({
+            if(details.status == _status)
+            {
+                VoteEventShortDetails memory shortDetails =  VoteEventShortDetails({
                 id: 1,
+                status: details.status,
                 totalVotes: details.totalVotes,
                 voteFee: details.voteFee,
                 tokenURI: voteContract.tokenURI(key)
             });
 
-            voteEventShortDetails[i] = shortDetails;
+                voteEventShortDetails[i] = shortDetails;
+            }
+            
         }
         return voteEventShortDetails;
     }
@@ -141,6 +154,7 @@ contract VoteEventProcessor is BaseAccessControl
         return VoteEventShortDetails(
             {
                 id: _voteEventId,
+                status: voteEventDetails[_voteEventId].status,
                 totalVotes: voteEventDetails[_voteEventId].totalVotes,
                 voteFee: voteEventDetails[_voteEventId].voteFee,
                 tokenURI: voteContract.tokenURI(_voteEventId)
@@ -150,5 +164,23 @@ contract VoteEventProcessor is BaseAccessControl
     function getEventCandidates(uint256 _voteEventId) public view returns (uint256[] memory)
     {
         return eventCandidates[_voteEventId];
+    }
+
+    function getVotesCount() public view returns(VoteCounts memory)
+    {
+        uint256 active = 0;
+        uint256 deactivated = 0;
+        for(uint256 i = 0; i < keys.length; ++i)
+        {
+            if(voteEventDetails[keys[i]].status == VoteEventStatus.Active) active++;
+            if(voteEventDetails[keys[i]].status == VoteEventStatus.Deactivated) deactivated++;
+        }
+
+        return VoteCounts(
+        {
+            total: keys.length,
+            active: active,
+            deactivated: deactivated
+        });
     }
 }

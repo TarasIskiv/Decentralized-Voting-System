@@ -183,3 +183,8 @@ p > span
 {
   margin-right: .5em;
 }
+
+.manage-events-container
+{
+  padding: 4em;
+}

@@ -72,7 +72,7 @@ describe('Vote Event Processor', () =>
 
         it('Getting Short Data', async() => 
         {
-            var voteEvents = await voteEventProcessor.connect(admin).getVotesShortInfo();
+            var voteEvents = await voteEventProcessor.connect(admin).getVotesShortInfo(0);
             expect(voteEvents.length).to.be.equal(1);
 
             var addedVote = voteEvents[0];
@@ -141,6 +141,14 @@ describe('Vote Event Processor', () =>
         {
             const candidates = await voteEventProcessor.connect(user).getEventCandidates(1);
             expect(Number(candidates.length)).to.be.equal(2);
+        });
+
+        it('Get Vote Counts', async() => 
+        {
+            var counts = await voteEventProcessor.connect(user).getVotesCount();
+            expect(Number(counts.total)).to.be.equal(1);
+            expect(Number(counts.active)).to.be.equal(1);
+            expect(Number(counts.deactivated)).to.be.equal(0);
         });
     });
 });

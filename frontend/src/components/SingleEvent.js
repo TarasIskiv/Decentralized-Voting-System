@@ -11,9 +11,10 @@ const SingleEvent = ({vote, search}) =>
     const [formattedVote, setFormattedVote] = useState(
         {
             id: Number(vote[0]),
-            totalVotes: Number(vote[1]),
-            voteFee: Number(vote[2]),
-            tokenURI: vote[3],
+            status: Number(vote[1]),
+            totalVotes: Number(vote[2]),
+            voteFee: Number(vote[3]),
+            tokenURI: vote[4],
             name: "",
             description: "",
             imageUrl: ""

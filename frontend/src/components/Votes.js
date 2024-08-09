@@ -26,8 +26,7 @@ const Votes = ({search}) =>
                 return;
             }
             const voteEventProcessor = new ethers.Contract(voteEventProcessorAddress, VoteEventProcessor, signer);
-            var voteEvents = await voteEventProcessor.getVotesShortInfo();
-
+            var voteEvents = await voteEventProcessor.getVotesShortInfo(0);
             setVotes(voteEvents);
         } catch (error) {
             console.error('Failed to fetch votes:', error);

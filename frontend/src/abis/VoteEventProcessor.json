@@ -309,6 +309,11 @@
             "type": "uint256"
           },
           {
+            "internalType": "enum VoteEventStatus",
+            "name": "status",
+            "type": "uint8"
+          },
+          {
             "internalType": "uint256",
             "name": "totalVotes",
             "type": "uint256"
@@ -334,6 +339,42 @@
   },
   {
     "inputs": [],
+    "name": "getVotesCount",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "total",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "active",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "deactivated",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct VoteCounts",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "enum VoteEventStatus",
+        "name": "_status",
+        "type": "uint8"
+      }
+    ],
     "name": "getVotesShortInfo",
     "outputs": [
       {
@@ -342,6 +383,11 @@
             "internalType": "uint256",
             "name": "id",
             "type": "uint256"
+          },
+          {
+            "internalType": "enum VoteEventStatus",
+            "name": "status",
+            "type": "uint8"
           },
           {
             "internalType": "uint256",
@@ -417,6 +463,32 @@
       }
     ],
     "name": "hasRole",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "isAdmin",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "isModerator",
     "outputs": [
       {
         "internalType": "bool",
