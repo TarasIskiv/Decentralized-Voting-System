@@ -3,8 +3,12 @@ import config from '../config.json'
 import VoteEventProcessor from '../abis/VoteEventProcessor.json'
 import { useEffect, useState } from 'react';
 import ManageableEvent from './ManageableEvent';
+import BaseAccessControl from '../abis/BaseAccessControl.json'
 const ManageEvents = () => 
 {
+
+    const [canRemove, setCanRemove] = useState(false);
+    const [canDeactivate, setCanDeactivate] = useState(false);
 
     const [formattedVoteCounts, setFormattedVoteCounts] = useState(
     {
@@ -53,26 +57,57 @@ const ManageEvents = () =>
         console.log(deactivatedVotes.length);
     }
 
+    const loadRules = async () => 
+        {
+            if (!window.ethereum) {
+                console.error('Ethereum provider not found. Make sure you have MetaMask installed.');
+                return;
+            }
+       
+            const provider = new ethers.BrowserProvider(window.ethereum);
+            const signer = await provider.getSigner(); // Create a signer from the provider
+            const network = await provider.getNetwork();
+            const baseAccessControlAddress = config[Number(network.chainId)]?.baseAccessControl?.address;
+    
+            if (!baseAccessControlAddress) {
+                console.error('baseAccessControlAddress address not found for the current network.');
+                return;
+            }
+            const baseAccessControlContract = new ethers.Contract(baseAccessControlAddress, BaseAccessControl, signer);
+            
+            var isAdmin = await baseAccessControlContract.isAdmin();
+            var isModerator = await baseAccessControlContract.isModerator();
+    
+            setCanDeactivate(isModerator);
+            setCanRemove(isAdmin);
+        }
+    
+
     useEffect(() => 
     {
-        loadEvents();
+        const load = async () => 
+        {
+            await loadEvents();
+            await loadRules();
+        }
+            load();
     }, [])
 
     return (
         <div className='manage-events-container'>
             <div className='w-100 d-flex justify-content-between'>
                 <div>
-                    <span>Total events: {Number(formattedVoteCounts.totalVotes)} | </span>
-                    <span>Active: {Number(formattedVoteCounts.active)} | </span>
-                    <span>Deactivated: {Number(formattedVoteCounts.deactivated)}</span>
+                    <span className="single-candidate-info">Total events: {Number(formattedVoteCounts.totalVotes)} | </span>
+                    <span className="single-candidate-info">Active: {Number(formattedVoteCounts.active)} | </span>
+                    <span className="single-candidate-info">Deactivated: {Number(formattedVoteCounts.deactivated)}</span>
                 </div>
-                <button className="btn btn-primary">Mint Event</button>
+                <button className="btn btn-primary" disabled={!(canRemove || canDeactivate)}>Mint Event</button>
             </div>
             <hr/>
             <h4>Active</h4>
             {activeVotes.map((vote, voteIndex) => (
                 <div key={voteIndex}>
-                    <ManageableEvent vote={vote}/>
+                    <ManageableEvent vote={vote} canDeactivate={canDeactivate} canRemove={canRemove}/>
                 </div>
             ))}
             <hr/>
@@ -82,7 +117,7 @@ const ManageEvents = () =>
                     <div>
                         {deactivatedVotes.map((vote, voteIndex) => (
                             <div key={voteIndex}>
-                                <ManageableEvent vote={vote}/>
+                                <ManageableEvent vote={vote} canDeactivate={canDeactivate} canRemove={canRemove}/>
                             </div>
                         ))}
                     </div>
