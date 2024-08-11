@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
-
+import {ethers} from 'ethers';
+import config from '../config.json'
+import VoteEventProcessor from '../abis/VoteEventProcessor.json'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 
@@ -40,9 +42,24 @@ const ManageableEvent = ({vote, canRemove, canDeactivate}) =>
 
     const getEthPrice = (priceInWei) => priceInWei / 1000000000000000000;
 
-    const deactivateEvent = () => 
+    const deactivateEvent = async () => 
     {
-        console.log('deactivateEvent called')
+        if (!window.ethereum) {
+            console.error('Ethereum provider not found. Make sure you have MetaMask installed.');
+            return;
+        }
+   
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner(); // Create a signer from the provider
+        const network = await provider.getNetwork();
+        const voteEventProcessorAddress = config[Number(network.chainId)]?.voteEventProcessor?.address;
+
+        if (!voteEventProcessorAddress) {
+            console.error('VoteEventProcessor address not found for the current network.');
+            return;
+        }
+        const voteEventProcessor = new ethers.Contract(voteEventProcessorAddress, VoteEventProcessor, signer);
+        await voteEventProcessor.deactivateVoteEvent(formattedVote.id);
     }
     useEffect(() => 
     {
