@@ -54,6 +54,11 @@ const Header = () =>
         //navigate("/manageEvents/");
     }
 
+    const goHome = () => 
+    {
+        navigate("/");
+    }
+
     useEffect(() => 
     {
         verifyAccess();
@@ -63,6 +68,7 @@ const Header = () =>
         <div className='d-flex justify-content-between align-items-center header'>
           <h3>Decentralized Vote App</h3>
           <div className='d-flex align-items-center'>
+            <button className="btn btn-primary action-btn me-2" onClick={goHome}>Home</button>
             {hasAccess && (
               <>
                 <button className='btn btn-primary action-btn me-2' onClick={goToEvents}>Manage Events</button>
