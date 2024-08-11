@@ -40,7 +40,7 @@ contract BaseAccessControl is AccessControl
 
     function grantModeratorRole(address _caller, address _moderator) public onlyAdmin(_caller)
     {
-        _grantRole(MODERATOR_ROLE, _moderator);
+        grantRole(MODERATOR_ROLE, _moderator);
     }
     
     function revokeModeratorRole(address _caller, address _moderator) public onlyAdmin(_caller)

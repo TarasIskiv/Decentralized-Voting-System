@@ -30,7 +30,7 @@ const Header = () =>
 
         if (!baseAccessControlAddress) 
         {
-            console.error('VoteEventProcessor address not found for the current network.');
+            console.error('baseAccessControl address not found for the current network.');
             return;
         }
         

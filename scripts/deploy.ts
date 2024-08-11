@@ -6,7 +6,7 @@ async function main()
     const candidateBaseUrl: string = "https://ipfs.io/ipfs/QmWeA3L3UuM5F6dL8FWLkFhmXmTrU15otBpspHRrks5Chm"
     const voteEventUrl: string = "https://ipfs.io/ipfs/QmPzxyHbEHXEjLsQmLSHV3Mn7UHJVzvczbto72unvnx4aD/1.json";
 
-    const [admin, moderator, user] = await ethers.getSigners();
+    const [admin, moderator] = await ethers.getSigners();
 
     const adminAddress = await admin.getAddress();
     const moderatorAddress = await moderator.getAddress();
@@ -47,13 +47,16 @@ async function main()
     console.log('VoteEventProcessor has been deployed');
 
     //Grant moderator with access
-    await voteEventProcessor.connect(admin).grantModeratorRole(adminAddress, moderatorAddress);
+    await baseAccessControl.connect(admin).grantModeratorRole(adminAddress, moderator)
 
     //Mint Vote Event
     await voteEventProcessor.connect(admin).addNewEvent(voteEventUrl);
     await voteEventProcessor.connect(admin).addCandidate(1, 1);
     await voteEventProcessor.connect(admin).addCandidate(1, 2);
     console.log(await voteEventProcessor.getAddress());
+
+    console.log('Admins address: ' + adminAddress);
+    console.log('Moderators address: ' + moderatorAddress);
     console.log('Deployemnt finished');
 }
 

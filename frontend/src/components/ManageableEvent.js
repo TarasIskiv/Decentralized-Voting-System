@@ -40,6 +40,10 @@ const ManageableEvent = ({vote, canRemove, canDeactivate}) =>
 
     const getEthPrice = (priceInWei) => priceInWei / 1000000000000000000;
 
+    const deactivateEvent = () => 
+    {
+        console.log('deactivateEvent called')
+    }
     useEffect(() => 
     {
         fetchMetadata();
@@ -64,7 +68,10 @@ const ManageableEvent = ({vote, canRemove, canDeactivate}) =>
                 </div>
                     <div className="col">
                         <div className="d-flex flex-column justify-content-center w-100 h-100">
-                        <button className="btn btn-warning" style={{ display: formattedVote.status === 0 ? 'block' : 'none' }} disabled={!canDeactivate}>Deactivate</button>
+                        <button className="btn btn-warning" 
+                            style={{ display: formattedVote.status === 0 ? 'block' : 'none' }}
+                            disabled={!canDeactivate} 
+                            onClick={deactivateEvent}>Deactivate</button>
                             <br/>
                             <button className="btn btn-danger" style={{ display: formattedVote.status === 1 ? 'block' : 'none' }} disabled={!canRemove}>Remove</button>
                         </div>

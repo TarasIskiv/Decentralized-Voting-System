@@ -37,7 +37,7 @@ describe('BaseAccessControl', () =>
         {
             await baseAccessControl.connect(admin).grantModeratorRole(adminAddress, moderator)
             var roleGrantedCorrectly = await baseAccessControl.hasRole(moderatorRole, moderator);
-            expect(roleGrantedCorrectly).to.equal(true);
+            expect(roleGrantedCorrectly).to.be.equal(true);
         });
 
         it('Revoke moderator role', async() => 

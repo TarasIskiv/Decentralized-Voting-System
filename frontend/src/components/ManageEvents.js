@@ -74,10 +74,8 @@ const ManageEvents = () =>
                 return;
             }
             const baseAccessControlContract = new ethers.Contract(baseAccessControlAddress, BaseAccessControl, signer);
-            
             var isAdmin = await baseAccessControlContract.isAdmin();
             var isModerator = await baseAccessControlContract.isModerator();
-    
             setCanDeactivate(isModerator);
             setCanRemove(isAdmin);
         }
