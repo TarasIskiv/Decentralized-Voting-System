@@ -3,7 +3,6 @@ import config from '../config.json'
 import VoteEventProcessor from '../abis/VoteEventProcessor.json'
 import { useContext, useEffect, useState } from 'react';
 import ManageableEvent from './ManageableEvent';
-import BaseAccessControl from '../abis/BaseAccessControl.json'
 import { useBaseAccessControl } from '../contexts/BaseAccessControlContext';
 const ManageEvents = () => 
 {
@@ -57,38 +56,11 @@ const ManageEvents = () =>
         console.log(deactivatedVotes.length);
     }
 
-    const loadRules = async () => 
-        {
-            // if (!window.ethereum) {
-            //     console.error('Ethereum provider not found. Make sure you have MetaMask installed.');
-            //     return;
-            // }
-       
-            // const provider = new ethers.BrowserProvider(window.ethereum);
-            // const signer = await provider.getSigner(); // Create a signer from the provider
-            // const network = await provider.getNetwork();
-            // const baseAccessControlAddress = config[Number(network.chainId)]?.baseAccessControl?.address;
-    
-            // if (!baseAccessControlAddress) {
-            //     console.error('baseAccessControlAddress address not found for the current network.');
-            //     return;
-            // }
-            // const baseAccessControlContract = new ethers.Contract(baseAccessControlAddress, BaseAccessControl, signer);
-            // var isAdmin = await baseAccessControlContract.isAdmin();
-            // var isModerator = await baseAccessControlContract.isModerator();
-            // setCanDeactivate(isModerator);
-            // setCanRemove(isAdmin);
-        }
     
 
     useEffect(() => 
     {
-        const load = async () => 
-        {
-            await loadEvents();
-            await loadRules();
-        }
-            load();
+        loadEvents();
     }, [])
 
     return (
