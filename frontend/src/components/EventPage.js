@@ -8,10 +8,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import SingleCandidate from "./SingleCandidate";
 import { AccountContext } from "../contexts/AccountContext";
-
+import { useCandidateContext } from "../contexts/CandidateContext";
 const EventPage = () =>
 {
     const {account} = useContext(AccountContext);
+    const { getCandidateTokenURI } = useCandidateContext();
 
     const { voteEventId } = useParams();
     const [voteEvent, setVoteEvent] = useState(
@@ -48,9 +49,7 @@ const EventPage = () =>
             }
             const voteEventProcessor = new ethers.Contract(voteEventProcessorAddress, VoteEventProcessor, signer);
             var shortInfo = await voteEventProcessor.getVoteShortInfo(voteEventId);
-
-            var metadata = await loadMeta(shortInfo[3]);
-
+            var metadata = await loadMeta(shortInfo[4]);
             setVoteEvent(
             {
                 id: Number(shortInfo[0]),
@@ -61,7 +60,7 @@ const EventPage = () =>
                 description: metadata.description,
                 name: metadata.name
             });
-
+            console.log(voteEvent.imageUrl);
             setLoading(false);
         } catch (error) {
             console.error('Failed to fetch votes:', error);
@@ -115,7 +114,7 @@ const EventPage = () =>
         for(let i = 0; i < candidates.length; ++i)
         {
             let candidateVotes = await voteEventProcessor.getCandidateVotes(voteEventId, candidates[i]);
-            let uri = await loadCandidateMetaURI(candidates[i]);
+            let uri = await getCandidateTokenURI(candidates[i]);
             let candidateMeta = await loadMeta(uri);
             let candidate = 
             {
@@ -131,22 +130,6 @@ const EventPage = () =>
 
         setCandidates(freshCandidates);
     }
-
-    const loadCandidateMetaURI = async (candidateId) => 
-    {
-        const provider = new ethers.BrowserProvider(window.ethereum);
-        const signer = await provider.getSigner(); 
-        const network = await provider.getNetwork();
-        const candidateAddress = config[Number(network.chainId)]?.candidate?.address;
-
-        if (!candidateAddress) {
-            console.error('VoteEventProcessor address not found for the current network.');
-            return;
-        }
-        const voteEventProcessor = new ethers.Contract(candidateAddress, Candidate, signer);
-        return await voteEventProcessor.tokenURI(candidateId);
-    }
-
     const vote = async (candidateId) => 
     {
         const provider = new ethers.BrowserProvider(window.ethereum);
