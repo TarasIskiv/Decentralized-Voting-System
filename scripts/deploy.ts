@@ -47,7 +47,7 @@ async function main()
     console.log('VoteEventProcessor has been deployed');
 
     //Grant moderator with access
-    await baseAccessControl.connect(admin).grantModeratorRole(adminAddress, moderator)
+    await baseAccessControl.connect(admin).grantModeratorRole(adminAddress, moderatorAddress)
 
     //Mint Vote Event
     await voteEventProcessor.connect(admin).addNewEvent(voteEventUrl);

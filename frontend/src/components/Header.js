@@ -17,6 +17,7 @@ const Header = () =>
         if (accounts.length > 0) {
             const selectedAccount = ethers.getAddress(accounts[0]);
             setAccount(selectedAccount); // Update the account in context
+            debugger;
         }
     }
 

@@ -7,16 +7,19 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import EventPage from './EventPage';
 import ManageEvents from './ManageEvents';
 import { AccountProvider, AccountContext } from '../contexts/AccountContext';
+import { BaseAccessControlProvider } from '../contexts/BaseAccessControlContext';
 function App() {
   // The provider should be at the top level of the app, wrapping the BrowserRouter
   return (
     <AccountProvider>
-      <BrowserRouter>
-        <div className="App">
-          <Header />
-          <AppRoutes />
-        </div>
-      </BrowserRouter>
+      <BaseAccessControlProvider>
+        <BrowserRouter>
+          <div className="App">
+            <Header />
+            <AppRoutes />
+          </div>
+        </BrowserRouter>
+      </BaseAccessControlProvider>
     </AccountProvider>
   );
 }
