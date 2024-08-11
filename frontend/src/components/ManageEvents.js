@@ -39,9 +39,6 @@ const ManageEvents = () =>
             setDeactivatedVotes([]);
         else
             setDeactivatedVotes(unActive);
-
-        console.log(deactivatedVotes);
-        console.log(deactivatedVotes.length);
     }
 
     

@@ -49,7 +49,7 @@ export const VoteEventProcessorProvider = ({children}) =>
 
     const getVotesShortInfo = async (status) =>
     {
-        if(!contract) return null;
+        if(!contract) return [];
         const shortInfo = await contract.getVotesShortInfo(status);
         return shortInfo;
     }
