@@ -4,10 +4,13 @@ import config from '../config.json'
 import VoteEventProcessor from '../abis/VoteEventProcessor.json'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
+import { useVoteEventProcessorContext } from "../contexts/VoteEventProcessorContext";
 
 const ManageableEvent = ({vote, canRemove, canDeactivate}) =>
 {
     const [isVisible, setIsVisible] = useState(true);
+
+    const {deactivateVoteEvent, activateVoteEvent} = useVoteEventProcessorContext();
 
     const [formattedVote, setFormattedVote] = useState(
         {
@@ -44,42 +47,12 @@ const ManageableEvent = ({vote, canRemove, canDeactivate}) =>
 
     const deactivateEvent = async () => 
     {
-        if (!window.ethereum) {
-            console.error('Ethereum provider not found. Make sure you have MetaMask installed.');
-            return;
-        }
-   
-        const provider = new ethers.BrowserProvider(window.ethereum);
-        const signer = await provider.getSigner(); // Create a signer from the provider
-        const network = await provider.getNetwork();
-        const voteEventProcessorAddress = config[Number(network.chainId)]?.voteEventProcessor?.address;
-
-        if (!voteEventProcessorAddress) {
-            console.error('VoteEventProcessor address not found for the current network.');
-            return;
-        }
-        const voteEventProcessor = new ethers.Contract(voteEventProcessorAddress, VoteEventProcessor, signer);
-        await voteEventProcessor.deactivateVoteEvent(formattedVote.id);
+        await deactivateVoteEvent(formattedVote.id);
     }
 
     const activateEvent = async () => 
     {
-        if (!window.ethereum) {
-            console.error('Ethereum provider not found. Make sure you have MetaMask installed.');
-            return;
-        }
-   
-        const provider = new ethers.BrowserProvider(window.ethereum);
-        const signer = await provider.getSigner(); // Create a signer from the provider
-        const network = await provider.getNetwork();
-        const voteEventProcessorAddress = config[Number(network.chainId)]?.voteEventProcessor?.address;
-
-        if (!voteEventProcessorAddress) {
-            console.error('VoteEventProcessor address not found for the current network.');
-            return;
-        }
-        const voteEventProcessor = new ethers.Contract(voteEventProcessorAddress, VoteEventProcessor, signer);
-        await voteEventProcessor.activateVoteEvent(formattedVote.id);
+        await activateVoteEvent(formattedVote.id);
     }
 
     useEffect(() => 

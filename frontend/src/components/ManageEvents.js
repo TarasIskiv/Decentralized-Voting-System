@@ -4,9 +4,11 @@ import VoteEventProcessor from '../abis/VoteEventProcessor.json'
 import { useContext, useEffect, useState } from 'react';
 import ManageableEvent from './ManageableEvent';
 import { useBaseAccessControl } from '../contexts/BaseAccessControlContext';
+import { useVoteEventProcessorContext } from '../contexts/VoteEventProcessorContext';
 const ManageEvents = () => 
 {
 
+    const {votesCount, getVotesShortInfo} = useVoteEventProcessorContext();
     const {canRemove, canDeactivate} = useBaseAccessControl();
 
     const [formattedVoteCounts, setFormattedVoteCounts] = useState(
@@ -21,30 +23,16 @@ const ManageEvents = () =>
 
     const loadEvents = async () =>
     {
-        if (!window.ethereum) {
-            console.error('Ethereum provider not found. Make sure you have MetaMask installed.');
-            return;
-        }
-   
-        const provider = new ethers.BrowserProvider(window.ethereum);
-        const signer = await provider.getSigner(); // Create a signer from the provider
-        const network = await provider.getNetwork();
-        const voteEventProcessorAddress = config[Number(network.chainId)]?.voteEventProcessor?.address;
-
-        if (!voteEventProcessorAddress) {
-            console.error('VoteEventProcessor address not found for the current network.');
-            return;
-        }
-        const voteEventProcessor = new ethers.Contract(voteEventProcessorAddress, VoteEventProcessor, signer);
-        let voteCounts = await voteEventProcessor.getVotesCount();
+        
+        let voteCounts = await votesCount();
         setFormattedVoteCounts({
             totalVotes: voteCounts[0],
             active: voteCounts[1],
             deactivated: voteCounts[2]
         })
 
-        let active = await voteEventProcessor.getVotesShortInfo(0);
-        let unActive = await voteEventProcessor.getVotesShortInfo(1);
+        let active = await getVotesShortInfo(0);
+        let unActive = await getVotesShortInfo(1);
         setActiveVotes(active);
 
         if(unActive[0][0] === 0)

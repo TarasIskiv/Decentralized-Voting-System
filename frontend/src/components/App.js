@@ -9,18 +9,20 @@ import ManageEvents from './ManageEvents';
 import { AccountProvider, AccountContext } from '../contexts/AccountContext';
 import { BaseAccessControlProvider } from '../contexts/BaseAccessControlContext';
 import { CandidateProvider } from '../contexts/CandidateContext';
+import {VoteEventProcessorProvider} from '../contexts/VoteEventProcessorContext';
 function App() {
-  // The provider should be at the top level of the app, wrapping the BrowserRouter
   return (
     <AccountProvider>
       <BaseAccessControlProvider>
         <CandidateProvider>
-          <BrowserRouter>
-            <div className="App">
-              <Header />
-              <AppRoutes />
-            </div>
-          </BrowserRouter>
+          <VoteEventProcessorProvider>
+            <BrowserRouter>
+              <div className="App">
+                <Header />
+                <AppRoutes />
+              </div>
+            </BrowserRouter>
+          </VoteEventProcessorProvider>
         </CandidateProvider>
       </BaseAccessControlProvider>
     </AccountProvider>

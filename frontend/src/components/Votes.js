@@ -3,30 +3,16 @@ import {ethers} from 'ethers';
 import SingleEvent from './SingleEvent';
 import config from '../config.json';
 import VoteEventProcessor from '../abis/VoteEventProcessor.json';
+import { useVoteEventProcessorContext } from "../contexts/VoteEventProcessorContext";
 
 const Votes = ({search}) => 
 {
     const [votes, setVotes] = useState([]);
-    
+    const {getVotesShortInfo} = useVoteEventProcessorContext();
     const loadVotes =  async () => 
     {
         try {
-            if (!window.ethereum) {
-                console.error('Ethereum provider not found. Make sure you have MetaMask installed.');
-                return;
-            }
-       
-            const provider = new ethers.BrowserProvider(window.ethereum);
-            const signer = await provider.getSigner(); // Create a signer from the provider
-            const network = await provider.getNetwork();
-            const voteEventProcessorAddress = config[Number(network.chainId)]?.voteEventProcessor?.address;
-
-            if (!voteEventProcessorAddress) {
-                console.error('VoteEventProcessor address not found for the current network.');
-                return;
-            }
-            const voteEventProcessor = new ethers.Contract(voteEventProcessorAddress, VoteEventProcessor, signer);
-            var voteEvents = await voteEventProcessor.getVotesShortInfo(0);
+            var voteEvents = await getVotesShortInfo(0);
             setVotes(voteEvents);
         } catch (error) {
             console.error('Failed to fetch votes:', error);
