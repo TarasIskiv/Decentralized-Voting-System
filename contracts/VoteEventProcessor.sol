@@ -115,6 +115,14 @@ contract VoteEventProcessor is BaseAccessControl
         voteEventDetails[_eventId].status = VoteEventStatus.Deactivated;
     }
 
+    function activateVoteEvent(uint _eventId) onlyModerator(msg.sender) public
+    {
+        if(voteEventDetails[_eventId].status == VoteEventStatus.Deactivated)
+        {
+            voteEventDetails[_eventId].status = VoteEventStatus.Active;
+        }
+    }
+
     function getEventId(uint256 _eventId) public view returns(uint256)
     {
         return voteEventDetails[_eventId].id;

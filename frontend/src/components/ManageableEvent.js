@@ -61,6 +61,27 @@ const ManageableEvent = ({vote, canRemove, canDeactivate}) =>
         const voteEventProcessor = new ethers.Contract(voteEventProcessorAddress, VoteEventProcessor, signer);
         await voteEventProcessor.deactivateVoteEvent(formattedVote.id);
     }
+
+    const activateEvent = async () => 
+    {
+        if (!window.ethereum) {
+            console.error('Ethereum provider not found. Make sure you have MetaMask installed.');
+            return;
+        }
+   
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner(); // Create a signer from the provider
+        const network = await provider.getNetwork();
+        const voteEventProcessorAddress = config[Number(network.chainId)]?.voteEventProcessor?.address;
+
+        if (!voteEventProcessorAddress) {
+            console.error('VoteEventProcessor address not found for the current network.');
+            return;
+        }
+        const voteEventProcessor = new ethers.Contract(voteEventProcessorAddress, VoteEventProcessor, signer);
+        await voteEventProcessor.activateVoteEvent(formattedVote.id);
+    }
+
     useEffect(() => 
     {
         fetchMetadata();
@@ -85,10 +106,18 @@ const ManageableEvent = ({vote, canRemove, canDeactivate}) =>
                 </div>
                     <div className="col">
                         <div className="d-flex flex-column justify-content-center w-100 h-100">
-                        <button className="btn btn-warning" 
-                            style={{ display: formattedVote.status === 0 ? 'block' : 'none' }}
-                            disabled={!canDeactivate} 
-                            onClick={deactivateEvent}>Deactivate</button>
+                            {
+                                formattedVote.status === 0 ?
+                                (<button className="btn btn-warning" 
+                                    style={{ display: formattedVote.status === 0 ? 'block' : 'none' }}
+                                    disabled={!canDeactivate} 
+                                    onClick={deactivateEvent}>Deactivate</button>)
+                                :
+                                (<button className="btn btn-warning" 
+                                    style={{ display: formattedVote.status === 1 ? 'block' : 'none' }}
+                                    disabled={!canDeactivate} 
+                                    onClick={activateEvent}>Activate</button>)
+                            }
                             <br/>
                             <button className="btn btn-danger" style={{ display: formattedVote.status === 1 ? 'block' : 'none' }} disabled={!canRemove}>Remove</button>
                         </div>
