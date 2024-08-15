@@ -43,6 +43,11 @@ const ManageableEvent = ({vote, canRemove, canDeactivate}) =>
         } catch (err) {}
     }
 
+    const removeEvent = async () => 
+    {
+        await removeEvent(formattedVote.id);
+    }
+
     const getEthPrice = (priceInWei) => priceInWei / 1000000000000000000;
 
     const deactivateEvent = async () => 
@@ -92,7 +97,7 @@ const ManageableEvent = ({vote, canRemove, canDeactivate}) =>
                                     onClick={activateEvent}>Activate</button>)
                             }
                             <br/>
-                            <button className="btn btn-danger" style={{ display: formattedVote.status === 1 ? 'block' : 'none' }} disabled={!canRemove}>Remove</button>
+                            <button className="btn btn-danger" style={{ display: formattedVote.status === 1 ? 'block' : 'none' }} disabled={!canRemove} onClick={removeEvent}>Remove</button>
                         </div>
                     </div>
                 </div>
