@@ -51,7 +51,7 @@ const Header = () =>
 
     const goToCandidates = () => 
     {
-        //navigate("/manageEvents/");
+        navigate("/manageCandidates/");
     }
 
     const goHome = () => 
@@ -72,7 +72,7 @@ const Header = () =>
             {hasAccess && (
               <>
                 <button className='btn btn-primary action-btn me-2' onClick={goToEvents}>Manage Events</button>
-                <button className='btn btn-primary action-btn me-2'>Manage Candidates</button>
+                <button className='btn btn-primary action-btn me-2' onClick={goToCandidates}>Manage Candidates</button>
               </>
             )}
             {account ? (

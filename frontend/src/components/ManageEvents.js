@@ -1,7 +1,5 @@
-import {ethers} from 'ethers';
-import config from '../config.json'
-import VoteEventProcessor from '../abis/VoteEventProcessor.json'
-import { useContext, useEffect, useState } from 'react';
+
+import { useEffect, useState } from 'react';
 import ManageableEvent from './ManageableEvent';
 import { useBaseAccessControl } from '../contexts/BaseAccessControlContext';
 import { useVoteEventProcessorContext } from '../contexts/VoteEventProcessorContext';

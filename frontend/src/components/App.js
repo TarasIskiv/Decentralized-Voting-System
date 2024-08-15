@@ -10,6 +10,7 @@ import { AccountProvider, AccountContext } from '../contexts/AccountContext';
 import { BaseAccessControlProvider } from '../contexts/BaseAccessControlContext';
 import { CandidateProvider } from '../contexts/CandidateContext';
 import {VoteEventProcessorProvider} from '../contexts/VoteEventProcessorContext';
+import ManageCandidates from './ManageCandidates';
 function App() {
   return (
     <AccountProvider>
@@ -63,6 +64,7 @@ const AppRoutes = () => {
         <Route path='/home' element={<Home />} />
         <Route path='/voteEvent/:voteEventId' element={<EventPage />} /> 
         <Route path='/manageEvents/' element={<ManageEvents />} /> 
+        <Route path='/manageCandidates/' element={<ManageCandidates />} />
       </Routes>
     ) : (
       <div>Connect your wallet</div>

@@ -15,5 +15,7 @@ describe('Candidate', () =>
         await candidate.connect(admin).registerCandidate(url);
         var totalSupply = await candidate.totalSupply();
         expect(Number(totalSupply)).to.be.equal(1);
+        var candidateList = await candidate.connect(admin).getCandidates();
+        expect(candidateList.length).to.be.equal(1);
     });
 });

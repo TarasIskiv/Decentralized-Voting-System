@@ -52,12 +52,25 @@ export const CandidateProvider = ({ children }) => {
         }
     };
 
+    const getCandidates = async () => 
+    {
+        if (!contract) return [];
+        let candidates = await contract.getCandidates();
+        return candidates;
+    }
+
+    const removeCandidate = async (candidateId) =>
+    {
+        if (!contract) return;
+        await contract.removeCandidate(candidateId);
+    }
+
     useEffect(() => {
         initialiseContract();
     }, [account]);
 
     return (
-        <CandidateContext.Provider value={{ getCandidateTokenURI }}>
+        <CandidateContext.Provider value={{ getCandidateTokenURI, removeCandidate, getCandidates }}>
             {children}
         </CandidateContext.Provider>
     );
