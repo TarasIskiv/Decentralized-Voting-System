@@ -1,7 +1,4 @@
 import { useState, useEffect } from "react";
-import {ethers} from 'ethers';
-import config from '../config.json'
-import VoteEventProcessor from '../abis/VoteEventProcessor.json'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons';
 import { useVoteEventProcessorContext } from "../contexts/VoteEventProcessorContext";
@@ -10,7 +7,7 @@ const ManageableEvent = ({vote, canRemove, canDeactivate}) =>
 {
     const [isVisible, setIsVisible] = useState(true);
 
-    const {deactivateVoteEvent, activateVoteEvent} = useVoteEventProcessorContext();
+    const {deactivateVoteEvent, activateVoteEvent, removeVoteEvent} = useVoteEventProcessorContext();
 
     const [formattedVote, setFormattedVote] = useState(
         {
@@ -45,7 +42,7 @@ const ManageableEvent = ({vote, canRemove, canDeactivate}) =>
 
     const removeEvent = async () => 
     {
-        await removeEvent(formattedVote.id);
+        await removeVoteEvent(formattedVote.id);
     }
 
     const getEthPrice = (priceInWei) => priceInWei / 1000000000000000000;

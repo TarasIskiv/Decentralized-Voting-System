@@ -95,10 +95,16 @@ export const VoteEventProcessorProvider = ({children}) =>
         return candidateVotes;
     }
 
-    const removeEvent = async (voteEventId) =>
+    const removeVoteEvent = async (voteEventId) =>
     {
         if(!contract) return; 
         await contract.removeEvent(voteEventId);
+    }
+
+    const addNewEvent = async (url) => 
+    {
+        if(!contract) return; 
+        await contract.addNewEvent(url);
     }
     useEffect(() => 
     {
@@ -106,7 +112,7 @@ export const VoteEventProcessorProvider = ({children}) =>
     }, [account])
 
     return (
-        <VoteEventProcessorContext.Provider value={{getVoteShortInfo,getVotesShortInfo,votesCount,activateVoteEvent, deactivateVoteEvent, voteForCandidate, getEventCandidates, getCandidateVotes, removeEvent }}>
+        <VoteEventProcessorContext.Provider value={{getVoteShortInfo,getVotesShortInfo,votesCount,addNewEvent, activateVoteEvent, deactivateVoteEvent, voteForCandidate, getEventCandidates, getCandidateVotes, removeVoteEvent }}>
             {children}
         </VoteEventProcessorContext.Provider>
     );

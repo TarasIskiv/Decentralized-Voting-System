@@ -5,11 +5,13 @@ import { useContext, useEffect, useState } from 'react';
 import ManageableEvent from './ManageableEvent';
 import { useBaseAccessControl } from '../contexts/BaseAccessControlContext';
 import { useVoteEventProcessorContext } from '../contexts/VoteEventProcessorContext';
+import MintItem from './MintItem';
 const ManageEvents = () => 
 {
 
-    const {votesCount, getVotesShortInfo} = useVoteEventProcessorContext();
+    const {votesCount, getVotesShortInfo, addNewEvent} = useVoteEventProcessorContext();
     const {canRemove, canDeactivate} = useBaseAccessControl();
+    const [isMintOpened, setIsMintOpened] = useState(false);
 
     const [formattedVoteCounts, setFormattedVoteCounts] = useState(
     {
@@ -41,7 +43,25 @@ const ManageEvents = () =>
             setDeactivatedVotes(unActive);
     }
 
-    
+    const hasAccess = () => 
+    {
+        if(isMintOpened) return false;
+        return (canRemove || canDeactivate);
+    }
+
+    const openMint = () => 
+    {
+        setIsMintOpened(true);
+    }
+
+    const mintEvent = async (url) => 
+    {
+        if(url != null)
+        {
+            await addNewEvent(url);
+        }
+        setIsMintOpened(false);
+    }
 
     useEffect(() => 
     {
@@ -56,13 +76,14 @@ const ManageEvents = () =>
                     <span className="single-candidate-info">Active: {Number(formattedVoteCounts.active)} | </span>
                     <span className="single-candidate-info">Deactivated: {Number(formattedVoteCounts.deactivated)}</span>
                 </div>
-                <button className="btn btn-primary" disabled={!(canRemove || canDeactivate)}>Mint Event</button>
+                <button className="btn btn-primary" disabled={() => !hasAccess()} onClick={openMint}>Mint Event</button>
             </div>
             <hr/>
+            <MintItem isHidden={!isMintOpened} onMintLinkChanged={mintEvent}/>
             <h4>Active</h4>
             {activeVotes.map((vote, voteIndex) => (
                 <div key={voteIndex}>
-                    <ManageableEvent vote={vote} canDeactivate={canDeactivate} canRemove={canRemove}/>
+                    <ManageableEvent disabled={isMintOpened} vote={vote} canDeactivate={canDeactivate} canRemove={canRemove}/>
                 </div>
             ))}
             <hr/>
