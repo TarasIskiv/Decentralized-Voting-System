@@ -13,8 +13,8 @@ const ManageCandidates = () =>
     const [candidates, setCandidates] = useState([]);
     const loadCandidates = async () => 
     {
-        let candidates = await getCandidates();
-        setCandidates(candidates);
+        let currentCandidates = await getCandidates();
+        setCandidates(currentCandidates);
     }
 
     const openMint = () => 
@@ -46,19 +46,18 @@ const ManageCandidates = () =>
         <div className='manage-events-container'>
             <div className='w-100 d-flex justify-content-between'>
                 <div>
-                    <span className="single-candidate-info">Total events: 1 </span>
+                    <span className="single-candidate-info">Total candidates: {candidates.length} </span>
                 </div>
-                <button className="btn btn-primary" disabled={() => !hasAccess()} onClick={openMint}>Mint Candidate</button>
+                <button className="btn btn-primary" onClick={openMint}>Mint Candidate</button>
             </div>
             <hr/>
             <MintItem isHidden={!isMintOpened} onMintLinkChanged={mintEvent}/>
             <h4>Candidates</h4>
             {candidates.map((candidate, voteIndex) => (
                 <div key={voteIndex}>
-                    <ManageableCandidate disabled={isMintOpened} candidate={candidate} canRemove={canRemove}/>
+                    <ManageableCandidate candidateShortInfo={candidate} canRemove={canRemove}/>
                 </div>
             ))}
-            <hr/>
         </div>
     );
 }

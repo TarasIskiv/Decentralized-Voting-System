@@ -81,7 +81,7 @@ const ManageEvents = () =>
             <h4>Active</h4>
             {activeVotes.map((vote, voteIndex) => (
                 <div key={voteIndex}>
-                    <ManageableEvent disabled={isMintOpened} vote={vote} canDeactivate={canDeactivate} canRemove={canRemove}/>
+                    <ManageableEvent vote={vote} canDeactivate={canDeactivate} canRemove={canRemove}/>
                 </div>
             ))}
             <hr/>

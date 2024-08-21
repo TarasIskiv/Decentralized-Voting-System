@@ -55,6 +55,7 @@ export const CandidateProvider = ({ children }) => {
     const getCandidates = async () => 
     {
         if (!contract) return [];
+
         let candidates = await contract.getCandidates();
         return candidates;
     }
