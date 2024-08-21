@@ -9,7 +9,7 @@ const ManageCandidates = () =>
     const {canRemove, canDeactivate} = useBaseAccessControl();
     const [isMintOpened, setIsMintOpened] = useState(false);
 
-    const {getCandidates} = useCandidateContext();
+    const {getCandidates, mint} = useCandidateContext();
     const [candidates, setCandidates] = useState([]);
     const loadCandidates = async () => 
     {
@@ -26,7 +26,7 @@ const ManageCandidates = () =>
     {
         if(url != null)
         {
-            //await addNewEvent(url);
+            await mint(url);
         }
         setIsMintOpened(false);
     }

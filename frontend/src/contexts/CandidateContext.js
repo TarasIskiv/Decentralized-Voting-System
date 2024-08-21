@@ -66,12 +66,18 @@ export const CandidateProvider = ({ children }) => {
         await contract.removeCandidate(candidateId);
     }
 
+    const mint = async (url) =>
+    {
+        if (!contract) return;
+        await contract.registerCandidate(url);
+    }
+
     useEffect(() => {
         initialiseContract();
     }, [account]);
 
     return (
-        <CandidateContext.Provider value={{ getCandidateTokenURI, removeCandidate, getCandidates }}>
+        <CandidateContext.Provider value={{ getCandidateTokenURI, removeCandidate, getCandidates, mint }}>
             {children}
         </CandidateContext.Provider>
     );
