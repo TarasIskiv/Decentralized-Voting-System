@@ -33,7 +33,7 @@ const ManageCandidates = () =>
     
     const hasAccess = () => 
     {
-        if(isMintOpened) return false;
+        if(isMintOpened) return true;
         return (canRemove || canDeactivate);
     }
 
@@ -48,13 +48,15 @@ const ManageCandidates = () =>
                 <div>
                     <span className="single-candidate-info">Total candidates: {candidates.length} </span>
                 </div>
-                <button className="btn btn-primary" onClick={openMint}>Mint Candidate</button>
+                <button className="btn btn-primary" disabled={hasAccess()}  onClick={() => openMint()}>Mint Candidate</button>
             </div>
             <hr/>
-            <MintItem isHidden={!isMintOpened} onMintLinkChanged={mintEvent}/>
+            <div  style={{ display: isMintOpened ? 'block' : 'none' }}>
+                <MintItem onMintLinkChanged={mintEvent}/>
+            </div>
             <h4>Candidates</h4>
-            {candidates.map((candidate, voteIndex) => (
-                <div key={voteIndex}>
+            {candidates.map((candidate, candidateKey) => (
+                <div key={candidateKey}>
                     <ManageableCandidate candidateShortInfo={candidate} canRemove={canRemove}/>
                 </div>
             ))}

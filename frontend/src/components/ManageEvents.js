@@ -43,7 +43,7 @@ const ManageEvents = () =>
 
     const hasAccess = () => 
     {
-        if(isMintOpened) return false;
+        if(isMintOpened) return true;
         return (canRemove || canDeactivate);
     }
 
@@ -74,7 +74,7 @@ const ManageEvents = () =>
                     <span className="single-candidate-info">Active: {Number(formattedVoteCounts.active)} | </span>
                     <span className="single-candidate-info">Deactivated: {Number(formattedVoteCounts.deactivated)}</span>
                 </div>
-                <button className="btn btn-primary" disabled={() => !hasAccess()} onClick={openMint}>Mint Event</button>
+                <button className="btn btn-primary" disabled={hasAccess()} onClick={openMint}>Mint Event</button>
             </div>
             <hr/>
             <MintItem isHidden={!isMintOpened} onMintLinkChanged={mintEvent}/>
